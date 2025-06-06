@@ -9,7 +9,7 @@ export const users = pgTable("users", {
   fullName: text("full_name").notNull(),
   phone: text("phone"),
   address: text("address"),
-  role: text("role").notNull().default("customer"), // customer, shopkeeper
+  role: text("role").notNull().default("customer"), // customer, store_owner
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -169,6 +169,8 @@ export const returns = pgTable("returns", {
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
+}).extend({
+  role: z.enum(["customer", "store_owner"]).default("customer"),
 });
 
 export const insertStoreSchema = createInsertSchema(stores).omit({
@@ -193,10 +195,10 @@ export const insertOrderSchema = createInsertSchema(orders).omit({
   id: true,
   createdAt: true,
 }).extend({
-  latitude: z.union([z.string(), z.number()]).optional().transform((val) => 
+  latitude: z.union([z.string(), z.number()]).optional().transform((val) =>
     val !== undefined ? String(val) : undefined
   ),
-  longitude: z.union([z.string(), z.number()]).optional().transform((val) => 
+  longitude: z.union([z.string(), z.number()]).optional().transform((val) =>
     val !== undefined ? String(val) : undefined
   ),
 });
