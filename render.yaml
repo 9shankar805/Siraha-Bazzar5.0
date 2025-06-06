@@ -3,10 +3,9 @@ services:
     name: siraha-bazaar
     env: node
     buildCommand: |
-      npm install
+      npm install --legacy-peer-deps
       cd client
-      npm install
-      npm install -g vite
+      npm install --legacy-peer-deps
       npm run build
       cd ..
     startCommand: npm start
